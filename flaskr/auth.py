@@ -27,15 +27,15 @@ def register():
             try:
                 with db.cursor() as cur:
                     cur.execute(
-                        "INSERT INTO \"user\" (username, password) VALUES (%s, %s)",
+                        'INSERT INTO "user" (username, password) VALUES (%s, %s)',
                         (username, generate_password_hash(password))
                     )
                 db.commit()
             except UniqueViolation:
-                db.rollback()  # rollback to clear failed transaction
+                db.rollback()
                 error = f"User {username} is already registered."
             else:
-                return redirect(url_for("auth.login"))
+                return redirect(url_for('auth.login'))
 
         flash(error)
 
@@ -62,7 +62,7 @@ def login():
         if error is None:
             session.clear()
             session['user_id'] = user['id']
-            return redirect(url_for('index'))
+            return redirect(url_for('blog.index'))
 
         flash(error)
 
@@ -85,7 +85,7 @@ def load_logged_in_user():
 @bp.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('index'))
+    return redirect(url_for('blog.index'))
 
 
 def login_required(view):
