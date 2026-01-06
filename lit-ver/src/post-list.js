@@ -1,5 +1,6 @@
 import { LitElement, html, css } from "lit";
 import { getAllPosts } from './post-service.js';
+import { getCurrentUser } from './auth-service.js';
 import "./posts-element"; 
 
 export class PostList extends LitElement {
@@ -28,12 +29,14 @@ export class PostList extends LitElement {
     }
 
     render() {
+
+        const isLoggedIn = !!getCurrentUser();
         
         return html`
         <section class="content">
             <header>
                 <h1>Posts</h1>
-                <a class="action" href="/new-post">New</a>
+                ${isLoggedIn ? html`<a class="action" href="/new-post">New</a>` : html``}
             </header>
             
             ${this.postList.map(post => html`

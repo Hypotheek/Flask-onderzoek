@@ -1,4 +1,5 @@
 import { LitElement, css, html } from 'lit'
+import { getCurrentUser, logoutUser } from './auth-service.js';
 
 export class NavElement extends LitElement {
   
@@ -11,16 +12,32 @@ export class NavElement extends LitElement {
     h1 { font-family: serif; color: #377ba8; margin: 1rem 0; }
     a { color: #377ba8; }
 `
+  _handleLogout(e) {
+    e.preventDefault();
+    logoutUser(); 
+  }
+
   render() {
+    const user = getCurrentUser();
+
     return html`
       <nav>
-        <h1>Javascript (Lit)</h1>
+        <h1><a href="/index.html">Javascript (Lit)</a></h1>
         <ul>
-          <li><a href="/register">register</a></li>
-          <li><a href="/login">login</a></li>
+          ${user 
+            ? html`
+                <li><span>${user.username}</span></li>
+                <li><a href="#" @click=${this._handleLogout}>Logout</a></li>
+              ` 
+            : html`
+                <li><a href="/register.html">Register</a></li>
+                <li><a href="/login.html">Login</a></li>
+              `
+          }
         </ul>
       </nav>
-    `
+    `;
   }
 }
-window.customElements.define('nav-element', NavElement)
+
+window.customElements.define('nav-element', NavElement);
