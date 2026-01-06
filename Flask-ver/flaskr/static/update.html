@@ -25,7 +25,6 @@
 <script>
     const postId = window.location.pathname.split('/').pop();
     
-    // 1. Load existing data
     window.addEventListener('DOMContentLoaded', async () => {
         const res = await fetch(`/blog/${postId}`);
         if (!res.ok) {
@@ -40,7 +39,6 @@
         document.getElementById('body').value = post.body;
     });
 
-    // 2. Handle Update
     document.getElementById('updateForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = {
@@ -49,7 +47,7 @@
         };
 
         const res = await fetch(`/blog/${postId}/update`, {
-            method: 'POST', // Using POST as per your Flask route
+            method: 'POST', 
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(formData)
         });
@@ -57,7 +55,6 @@
         if (res.ok) window.location.href = '/';
     });
 
-    // 3. Handle Delete
     document.getElementById('deleteForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const res = await fetch(`/blog/${postId}/delete`, { method: 'POST' });

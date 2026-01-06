@@ -17,7 +17,6 @@
         const user = JSON.parse(localStorage.getItem('user'));
         if (user) document.getElementById('newPostBtn').style.display = 'block';
 
-        // Fetch Posts
         const res = await fetch('/blog/'); 
         const posts = await res.json();
         
@@ -25,7 +24,6 @@
         container.innerHTML = '';
 
         posts.forEach((post, index) => {
-            // Check if current user is author
             const isAuthor = user && (user.id === post.author_id);
             const date = new Date(post.created).toISOString().split('T')[0];
 

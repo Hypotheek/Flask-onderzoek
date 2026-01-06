@@ -72,10 +72,10 @@ def retrieve(id):
     return jsonify(dict(post))
 
 
-@bp.route('/<int:id>/update', methods=['POST', 'PUT']) # APIs often use PUT for updates
+@bp.route('/<int:id>/update', methods=['POST', 'PUT']) 
 @login_required
 def update(id):
-    get_post(id) # Check permissions
+    get_post(id) 
     data = request.get_json() or {}
     title = data.get('title')
     body = data.get('body')
@@ -93,10 +93,10 @@ def update(id):
     return jsonify({"message": "Post updated"}), 200
 
 
-@bp.route('/<int:id>/delete', methods=['POST', 'DELETE']) # APIs use DELETE
+@bp.route('/<int:id>/delete', methods=['POST', 'DELETE']) 
 @login_required
 def delete(id):
-    get_post(id) # Check permissions
+    get_post(id) 
     db = get_db()
     with db.cursor() as cur:
         cur.execute('DELETE FROM post WHERE id = %s', (id,))
