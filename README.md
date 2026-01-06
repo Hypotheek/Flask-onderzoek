@@ -66,3 +66,39 @@ Run the app using python:
 python main.py
 ```
 
+## Javascript (wont be deployed thus one option)
+
+### Prerequisites:
+1. NodeJS
+
+### 🚀 How to Run This Project
+### Running it locally
+Download or clone this repository
+
+Go to the 'lit-ver' folder
+
+Open a cmd inside that folder
+
+run the following commands (On first install):
+```bash
+npm install
+```
+
+```bash
+npm install json-server --save-dev
+```
+
+Then to actually run it (any time after the first install):
+Open two cmd windows in the lit-ver folder, in one run this command (to start the json db):
+```bash
+npm run db
+```
+
+And in the other run this command (to start the webapp):
+```bash
+npm run dev
+```
+
+Go to the link (usually: http://localhost:5173)
+
+Now it should be running!
