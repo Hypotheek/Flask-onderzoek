@@ -8,7 +8,7 @@ Best for quick testing without installing anything.
 
 Go to the [Releases] page on the right.
 
-Download myApp.exe.
+Download FlaskApp.exe.
 
 Put it in a folder (it will create a new file so put it in the folder to contain it)
 
@@ -65,3 +65,4 @@ Run the app using python:
 ```bash
 python main.py
 ```
+
