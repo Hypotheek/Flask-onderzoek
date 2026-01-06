@@ -1,6 +1,47 @@
 # Install instructions
 
-## Flask
+## Flask (API version)
+
+### Prerequisites:
+Postgres installation
+These specific python packages
+```
+click==8.3.1
+Flask==3.1.2
+psycopg[binary]==3.3.2
+python-dotenv==1.2.1
+Werkzeug==3.1.4
+```
+(To install them just run `pip install package==version`, you can copy paste them from above)
+### 🚀 How to Run This Project
+Download or clone this repository
+
+Go to the Flask-ver folder
+
+Look for .env.example
+
+Rename .env.example to .env
+
+Change the data inside to any valid postgres user and database on your device locally
+
+Go back to the Flask-ver folder
+
+Open a cmd window inside that folder
+
+Run the following commands:
+```bash
+flask --app flaskr init-db
+```
+
+```bash
+flask --app flaskr run --debug
+```
+
+Now go to the link it gives you (it should be http://127.0.0.1:5000)
+
+It should now be running!
+
+## Flask (template version)
 
 ### 🚀 How to Run This Project
 #### Option A: The "One-Click" Method (Windows Only)
@@ -14,57 +55,8 @@ Put it in a folder (it will create a new file so put it in the folder to contain
 
 Double-click to run.
 
-#### Option B: Run with Docker (Recommended for Reproducibility)
-Best if you have Docker Desktop installed and want a clean environment.
-
-Clone this repository.
-
-Rename .env.example to .env.
-
-Run the following commands in your terminal:
-
-```bash
-cd Flask-ver
-```
-
-```bash
-docker-compose up --build
-```
-
-Then go to the first link it gives you
-<img width="592" height="125" alt="image" src="https://github.com/user-attachments/assets/72452c7c-6685-4b93-87f3-fdb64ea35c0a" />
-
-(So in my case: http://127.0.0.1:5000/)
-
-
-#### Option C: Run from Source (Manual)
-Best for developers who want to modify the code.
-
-Clone this repository.
-
-Create a virtual environment and activate it.
-
-Go to the right folder:
-```bash
-cd Flask-ver
-```
-
-Install dependencies: 
-```bash
-pip install -r requirements.txt.
-```
-
-Rename .env.example to .env.
-
-Start the backend:
-```bash
-docker compose up -d
-```
-
-Run the app using python:
-```bash
-python main.py
-```
+#### Option B: Follow the instructions for API version
+See API version but go to (template) folder instead of just Flask-ver
 
 ## Javascript (wont be deployed thus one option)
 
@@ -102,4 +94,5 @@ npm run dev
 Go to the link (usually: http://localhost:5173)
 
 Now it should be running!
+
 
