@@ -40,3 +40,29 @@ export async function deletePost(id) {
         throw error;
     }
 }
+
+export async function createPost(postData) {
+    try {
+        const response = await fetch(`${API_URL}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(postData)
+        });
+        if (!response.ok) throw new Error('Failed to create post');
+        return await response.json();
+    } catch (error) {
+        console.error("Error creating post:", error);
+        throw error;
+    }
+}
+
+export async function getAllPosts() {
+    try {
+        const response = await fetch(`${API_URL}`);
+        if (!response.ok) throw new Error('Failed to fetch posts');
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching posts:", error);
+        return [];
+    }
+}

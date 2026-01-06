@@ -1,4 +1,5 @@
 import { LitElement, html, css } from "lit";
+import { getAllPosts } from './post-service.js';
 import "./posts-element"; 
 
 export class PostList extends LitElement {
@@ -16,25 +17,18 @@ export class PostList extends LitElement {
 
     constructor() {
         super();
-        this.postList = [
-            {
-                "id": 1,
-                "title": "First Post",
-                "body": "This is the body of the first post.",
-                "author": "admin",
-                "created_at": "2024-01-01T12:00:00Z"
-            },
-            {
-                "id": 2,
-                "title": "Lit is Great",
-                "body": "Looping through arrays in Lit is very efficient.",
-                "author": "user123",
-                "created_at": "2024-01-02T15:30:00Z"
-            }
-        ];
+        this.postList = [];
+    }
+
+
+    async connectedCallback() {
+        super.connectedCallback();
+        const response = await getAllPosts();
+        this.postList = response;
     }
 
     render() {
+        
         return html`
         <section class="content">
             <header>
