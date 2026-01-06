@@ -55,7 +55,6 @@ export class RegisterElement extends LitElement {
                 
                 <input type="submit" value="Register" />
             </form>
-            <p>Already have an account? <a href="/login.html">Login here</a></p>
         </section>
         `;
     }

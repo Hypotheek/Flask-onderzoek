@@ -1,4 +1,5 @@
 import { LitElement, html, css } from "lit";
+import { loginUser } from './auth-service.js';
 
 export class LoginElement extends LitElement {
 
@@ -16,24 +17,46 @@ export class LoginElement extends LitElement {
         input.danger { color: #cc2f2e; }
         input[type=submit] { align-self: start; min-width: 10em; }
     `;
-  render() {
-    return html`
+
+    static properties = {
+        errorMessage: { type: String }
+    };
+
+    async _handleLogin(e) {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const username = formData.get('username');
+        const password = formData.get('password');
+
+        try {
+            await loginUser(username, password);
+            window.location.href = '/index.html';
+        } catch (err) {
+            this.errorMessage = err.message;
+        }
+    }
+
+    render() {
+        return html`
         <section class="content">
             <header>
-            <h1>Login</h1>
+                <h1>Login</h1>
             </header>
-            <form method="post">
+
+            ${this.errorMessage ? html`<div class="error">${this.errorMessage}</div>` : ''}
+
+            <form @submit="${this._handleLogin}">
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" required />
-                <br />
+                
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required />
-                <br />
+                
                 <input type="submit" value="Login" />
             </form>
         </section>
-    `;
-  }
+        `;
+    }
 }
 
 customElements.define("login-element", LoginElement);

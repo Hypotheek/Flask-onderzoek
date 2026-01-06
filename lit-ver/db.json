@@ -25,6 +25,13 @@
       "body": "alkgkoandbgj adsgjln",
       "author": "Anonymous",
       "created_at": "2026-01-06T20:07:27.940Z"
+    },
+    {
+      "id": "c527",
+      "title": "test",
+      "body": "123123nj1",
+      "author": "Hypotheek",
+      "created_at": "2026-01-06T20:18:42.236Z"
     }
   ],
   "users": [
@@ -37,6 +44,7 @@
       "password": "user123pass"
     },
     {
+      "id": "b198",
       "username": "Hypotheek",
       "password": "1234"
     }
