@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Post</title>
+    <link rel="stylesheet" href="./src/index.css" />
+    <script type="module" src="./src/nav-element.js"></script>
+    <script type="module" src="./src/edit-post.js"></script>
+</head>
+<body>
+    <nav-element></nav-element>
+    <edit-post id="editor"></edit-post>
+
+    <script type="module">
+        import { getPostById } from './src/post-service.js';
+
+        const params = new URLSearchParams(window.location.search);
+        const postId = params.get('id');
+
+        const editorElement = document.getElementById('editor');
+
+        async function init() {
+            if (postId) {
+                const postData = await getPostById(postId);
+                
+                if (postData) {
+                    editorElement.post = postData; 
+                } else {
+                    alert("Post not found!");
+                }
+            } else {
+                console.error("No ID provided in URL");
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
