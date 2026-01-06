@@ -1,5 +1,6 @@
 import { LitElement, html, css } from "lit";
 import { createPost } from './post-service.js';
+import { getCurrentUser } from './auth-service.js';
 
 export class NewPost extends LitElement {
     static styles = css`
@@ -24,7 +25,7 @@ export class NewPost extends LitElement {
         const newPost = {
             title: formData.get('title'),
             body: formData.get('body'),
-            author: formData.get('author') || 'Anonymous',
+            author: getCurrentUser().username,
             created_at: new Date().toISOString()
         };
         try {

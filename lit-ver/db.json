@@ -26,5 +26,19 @@
       "author": "Anonymous",
       "created_at": "2026-01-06T20:07:27.940Z"
     }
+  ],
+  "users": [
+    {
+      "username": "admin",
+      "password": "adminpass"
+    },
+    {
+      "username": "user123",
+      "password": "user123pass"
+    },
+    {
+      "username": "Hypotheek",
+      "password": "1234"
+    }
   ]
 }
