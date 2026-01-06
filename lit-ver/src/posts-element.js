@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit';
+import { getCurrentUser } from './auth-service';
 
 export class PostElement extends LitElement {
   static properties = {
@@ -19,7 +20,12 @@ export class PostElement extends LitElement {
   `;
 
   render() {
-    if (!this.post) return html``; 
+    if (!this.post) return html``;
+    
+    const user = getCurrentUser();
+    const isAuthor = user && this.post.author === user.username;
+
+
 
     return html`
       <article class="post">
@@ -30,8 +36,11 @@ export class PostElement extends LitElement {
             by ${this.post.author} on ${new Date(this.post.created_at).toLocaleDateString()}
           </div>
           </div>
-          <a class="action" href="edit.html?id=${this.post.id}">Edit</a>
-        </header>
+          ${isAuthor 
+              ? html`<a class="action" href="edit.html?id=${this.post.id}">Edit</a>` 
+              : html`` 
+          }        
+          </header>
         <div class="body">${this.post.body}</div>
       </article>
     `;
