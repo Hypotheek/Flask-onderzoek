@@ -1,72 +1,71 @@
 import functools
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for
+    Blueprint, g, request, session, jsonify
 )
 from werkzeug.security import check_password_hash, generate_password_hash
-from psycopg.errors import UniqueViolation
-
 from flaskr.db import get_db, IntegrityError
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
-
-@bp.route('/register', methods=('GET', 'POST'))
+@bp.route('/register', methods=['POST'])
 def register():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        db = get_db()
-        error = None
+    # Expect JSON data now, not form data
+    data = request.get_json() or {}
+    username = data.get('username')
+    password = data.get('password')
+    db = get_db()
+    error = None
 
-        if not username:
-            error = 'Username is required.'
-        elif not password:
-            error = 'Password is required.'
+    if not username:
+        error = 'Username is required.'
+    elif not password:
+        error = 'Password is required.'
 
-        if error is None:
-            try:
-                with db.cursor() as cur:
-                    cur.execute(
-                        'INSERT INTO "user" (username, password) VALUES (%s, %s)',
-                        (username, generate_password_hash(password))
-                    )
-                db.commit()
-            except IntegrityError:
-                db.rollback()
-                error = f"User {username} is already registered."
-            else:
-                return redirect(url_for('auth.login'))
+    if error is None:
+        try:
+            with db.cursor() as cur:
+                cur.execute(
+                    'INSERT INTO "user" (username, password) VALUES (%s, %s)',
+                    (username, generate_password_hash(password))
+                )
+            db.commit()
+            return jsonify({"message": "User registered successfully"}), 201
+        except IntegrityError:
+            db.rollback()
+            error = f"User {username} is already registered."
+            return jsonify({"error": error}), 409
 
-        flash(error)
-
-    return render_template('auth/register.html')
+    return jsonify({"error": error}), 400
 
 
-@bp.route('/login', methods=('GET', 'POST'))
+@bp.route('/login', methods=['POST'])
 def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        db = get_db()
-        error = None
+    data = request.get_json() or {}
+    username = data.get('username')
+    password = data.get('password')
+    db = get_db()
+    
+    with db.cursor() as cur:
+        cur.execute('SELECT * FROM "user" WHERE username = %s', (username,))
+        user = cur.fetchone()
 
-        with db.cursor() as cur:
-            cur.execute('SELECT * FROM "user" WHERE username = %s', (username,))
-            user = cur.fetchone()
+    if user is None or not check_password_hash(user['password'], password):
+        return jsonify({"error": "Incorrect username or password"}), 401
 
-        if user is None:
-            error = 'Incorrect username.'
-        elif not check_password_hash(user['password'], password):
-            error = 'Incorrect password.'
+    session.clear()
+    session['user_id'] = user['id']
+    
+    return jsonify({
+        "message": "Login successful",
+        "user_id": user['id'],
+        "username": user['username']
+    }), 200
 
-        if error is None:
-            session.clear()
-            session['user_id'] = user['id']
-            return redirect(url_for('blog.index'))
 
-        flash(error)
-
-    return render_template('auth/login.html')
+@bp.route('/logout', methods=['POST'])
+def logout():
+    session.clear()
+    return jsonify({"message": "Logged out"}), 200
 
 
 @bp.before_app_request
@@ -82,16 +81,11 @@ def load_logged_in_user():
             g.user = cur.fetchone()
 
 
-@bp.route('/logout')
-def logout():
-    session.clear()
-    return redirect(url_for('blog.index'))
-
-
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
-            return redirect(url_for('auth.login'))
+            # API clients need a 401 status, not a redirect to a login page
+            return jsonify({"error": "Authentication required"}), 401
         return view(**kwargs)
     return wrapped_view

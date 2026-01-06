@@ -1,0 +1,66 @@
+<!doctype html>
+<title>Edit Post - Flaskr</title>
+<link rel="stylesheet" href="../style.css"> <script src="../layout.js"></script>
+
+<section class="content">
+  <header>
+    <h1 id="pageTitle">Edit Post</h1>
+  </header>
+
+  <form id="updateForm">
+    <label for="title">Title</label>
+    <input name="title" id="title" required>
+    <label for="body">Body</label>
+    <textarea name="body" id="body"></textarea>
+    <input type="submit" value="Save">
+  </form>
+  
+  <hr>
+  
+  <form id="deleteForm">
+    <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+  </form>
+</section>
+
+<script>
+    const postId = window.location.pathname.split('/').pop();
+    
+    // 1. Load existing data
+    window.addEventListener('DOMContentLoaded', async () => {
+        const res = await fetch(`/blog/${postId}`);
+        if (!res.ok) {
+            alert("Post not found or unauthorized");
+            window.location.href = '/';
+            return;
+        }
+        const post = await res.json();
+        
+        document.getElementById('pageTitle').innerText = `Edit "${post.title}"`;
+        document.getElementById('title').value = post.title;
+        document.getElementById('body').value = post.body;
+    });
+
+    // 2. Handle Update
+    document.getElementById('updateForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = {
+            title: document.getElementById('title').value,
+            body: document.getElementById('body').value
+        };
+
+        const res = await fetch(`/blog/${postId}/update`, {
+            method: 'POST', // Using POST as per your Flask route
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(formData)
+        });
+
+        if (res.ok) window.location.href = '/';
+    });
+
+    // 3. Handle Delete
+    document.getElementById('deleteForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const res = await fetch(`/blog/${postId}/delete`, { method: 'POST' });
+        if (res.ok) window.location.href = '/';
+    });
+</script>

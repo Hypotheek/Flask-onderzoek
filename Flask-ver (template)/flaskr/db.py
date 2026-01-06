@@ -9,6 +9,7 @@ IS_FROZEN = getattr(sys, 'frozen', False)
 if IS_FROZEN:
     from sqlite3 import IntegrityError
 
+
     class SQLiteCursorWrapper(sqlite3.Cursor):
         def execute(self, sql, args=None):
             if sql:
@@ -28,6 +29,9 @@ if IS_FROZEN:
     def get_connector():
         base_path = os.path.dirname(sys.executable)
         db_path = os.path.join(base_path, 'db.sqlite')
+        
+        # Connect using the Custom Connection Factory
+        # ADDED: detect_types=sqlite3.PARSE_DECLTYPES to fix the date/strftime error
         conn = sqlite3.connect(
             db_path, 
             detect_types=sqlite3.PARSE_DECLTYPES, 
@@ -59,6 +63,7 @@ def close_db(e=None):
 
 def init_db():
     db = get_db()
+    
     schema_file = 'schema_sqlite.sql' if IS_FROZEN else 'schema.sql'
     
     if IS_FROZEN:

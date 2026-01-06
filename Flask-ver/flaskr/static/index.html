@@ -1,0 +1,48 @@
+<!doctype html>
+<title>Posts - Flaskr</title>
+<link rel="stylesheet" href="style.css">
+<script src="layout.js"></script>
+
+<section class="content">
+  <header>
+    <h1>Posts</h1>
+    <a id="newPostBtn" class="action" href="/create" style="display:none">New</a>
+  </header>
+
+  <div id="postsContainer">Loading...</div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) document.getElementById('newPostBtn').style.display = 'block';
+
+        // Fetch Posts
+        const res = await fetch('/blog/'); 
+        const posts = await res.json();
+        
+        const container = document.getElementById('postsContainer');
+        container.innerHTML = '';
+
+        posts.forEach((post, index) => {
+            // Check if current user is author
+            const isAuthor = user && (user.id === post.author_id);
+            const date = new Date(post.created).toISOString().split('T')[0];
+
+            const html = `
+                <article class="post">
+                    <header>
+                        <div>
+                            <h1>${post.title}</h1>
+                            <div class="about">by ${post.username} on ${date}</div>
+                        </div>
+                        ${isAuthor ? `<a class="action" href="/update/${post.id}">Edit</a>` : ''}
+                    </header>
+                    <p class="body">${post.body}</p>
+                </article>
+                ${index !== posts.length - 1 ? '<hr>' : ''}
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+        });
+    });
+</script>

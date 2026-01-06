@@ -1,6 +1,6 @@
 import os
 import sys
-from flask import Flask, send_from_directory
+from flask import Flask
 from dotenv import load_dotenv
 
 def create_app(test_config=None):
@@ -20,7 +20,7 @@ def create_app(test_config=None):
         app_db_uri = f"postgresql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}"
         secret_key = os.environ.get('SECRET_KEY', 'dev')
 
-    app = Flask(__name__, instance_relative_config=True, static_url_path='', static_folder='static')
+    app = Flask(__name__, instance_relative_config=True)
 
     app.config.from_mapping(
         SECRET_KEY=secret_key,
@@ -37,6 +37,10 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    @app.route('/hello')
+    def hello():
+        return 'Hello, World!'
+
     from . import db
     db.init_app(app)
 
@@ -44,27 +48,6 @@ def create_app(test_config=None):
     app.register_blueprint(auth.bp)
 
     from . import blog
-    app.register_blueprint(blog.bp, url_prefix='/blog')
-
-    
-    @app.route('/')
-    def index():
-        return app.send_static_file('index.html')
-
-    @app.route('/login')
-    def login_page():
-        return app.send_static_file('login.html')
-
-    @app.route('/register')
-    def register_page():
-        return app.send_static_file('register.html')
-
-    @app.route('/create')
-    def create_page():
-        return app.send_static_file('create.html')
-
-    @app.route('/update/<int:id>')
-    def update_page(id):
-        return app.send_static_file('update.html')
+    app.register_blueprint(blog.bp)
 
     return app
