@@ -1,14 +1,14 @@
 {
   "posts": [
     {
-      "id": 1,
-      "title": "First Post",
+      "id": "1",
+      "title": "First Postyy",
       "body": "This is the body of the first post.",
       "author": "admin",
       "created_at": "2024-01-01T12:00:00Z"
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "Lit is Great",
       "body": "Looping through arrays in Lit is very efficient.",
       "author": "user123",

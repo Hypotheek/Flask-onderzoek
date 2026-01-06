@@ -1,20 +1,42 @@
-
-const DB_URL = './db.json';
+const API_URL = 'http://localhost:3000/posts';
 
 export async function getPostById(id) {
     try {
-        const response = await fetch(DB_URL);
-        if (!response.ok) {
-            throw new Error('Failed to fetch database');
-        }
-        
-        const data = await response.json();
-        
-        const post = data.posts.find(p => p.id === parseInt(id));
-        
-        return post;
+        const response = await fetch(`${API_URL}/${id}`);
+        if (!response.ok) throw new Error('Post not found');
+        return await response.json();
     } catch (error) {
-        console.error("Error loading post:", error);
+        console.error("Error fetching post:", error);
         return null;
+    }
+}
+
+export async function updatePost(id, postData) {
+    try {
+        const response = await fetch(`${API_URL}/${id}`, {
+            method: 'PUT', // PUT replaces the entire object
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(postData)
+        });
+        
+        if (!response.ok) throw new Error('Failed to update post');
+        return await response.json();
+    } catch (error) {
+        console.error("Error updating post:", error);
+        throw error;
+    }
+}
+
+export async function deletePost(id) {
+    try {
+        const response = await fetch(`${API_URL}/${id}`, {
+            method: 'DELETE'
+        });
+
+        if (!response.ok) throw new Error('Failed to delete post');
+        return true;
+    } catch (error) {
+        console.error("Error deleting post:", error);
+        throw error;
     }
 }
