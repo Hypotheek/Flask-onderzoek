@@ -6,7 +6,7 @@
 #### Option A: The "One-Click" Method (Windows Only)
 Best for quick testing without installing anything.
 
-Go to the [Releases] page on the right.
+Go to the [Releases](https://github.com/Hypotheek/Flask-onderzoek/releases/tag/flask-v1.0) page on the right.
 
 Download FlaskApp.exe.
 
@@ -102,3 +102,4 @@ npm run dev
 Go to the link (usually: http://localhost:5173)
 
 Now it should be running!
+
