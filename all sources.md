@@ -8,7 +8,10 @@ https://pyinstaller.org/en/stable/runtime-information.html
 https://github.com/dashingsoft/pyarmor/issues/158  
 
 # Making the API version
-https://flask.palletsprojects.com/en/stable/
+> [!Note]
+> The Template version was used as the base for this so look at those sources too
+
+https://flask.palletsprojects.com/en/stable/  
 https://flask.palletsprojects.com/en/stable/api/
 https://flask.palletsprojects.com/en/stable/patterns/appfactories/  
 https://docs.python.org/3/library/sqlite3.html 
